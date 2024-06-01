@@ -33,7 +33,9 @@ class StdVectorPrefetcher<
 
   void prefetch(const std::vector<PointType>& points,
                 int_fast64_t prefetch_index) {
+#ifndef _MSC_VER
     __builtin_prefetch((points[prefetch_index]).data(), 0, 1);
+#endif
   }
 };
 
@@ -47,14 +49,20 @@ class StdVectorPrefetcher<std::vector<std::pair<IndexType, CoordinateType>>> {
 
   void prefetch(const std::vector<PointType>& points,
                 int_fast64_t prefetch_index) {
+#ifndef _MSC_VER
     __builtin_prefetch((points[prefetch_index]).data(), 0, 1);
+#endif
   }
 };
 
 template <typename T>
 class PlainArrayPrefetcher {
  public:
+#ifndef _MSC_VER
   void prefetch(const T* p) { __builtin_prefetch(p, 0, 1); }
+#else
+  void prefetch(const T* p) { ; }
+#endif
 };
 
 }  // namespace core
